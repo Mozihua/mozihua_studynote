@@ -1,0 +1,19 @@
+D:\Google_Downloads\bert\mri\orig\001.mgz
+D:\Google_Downloads\bert\mri\rawavg.mgz
+mri/orig.mgz	256 x 256 x 128 (1x1x1 mm^3)
+${FREESURFER_HOME}/avearge/mni305.cor.mgz
+mri/transforms/talairach.xfm	将原始文件线性配准到 MNI305 模板生成转换矩阵
+D:\Google_Downloads\bert\mri\nu.mgz	偏差校正就是校正由于磁场不均匀性引起的信号偏差，校正以后生成的文件
+D:\Google_Downloads\bert\mri\T1.mgz	信号标准化(normalization)这一步将白质区域的信号标准化为 110 左右
+D:\Google_Downloads\bert\mri\brainmask.mgz 颅骨剥离即去除非脑（non-brain）的组织
+transforms/talairach.lta 将偏差校正后的图像（nu.mgz）配准到 GCA 模板生成转换矩阵
+$FREESURFER_HOME/average/RB_all_2016-05-10.vc700.gca GCA 模板
+$FREESURFER_HOME/average/RB_all_withskull_2016-05-10.vc700.gca 颅骨剥离模板
+D:\Google_Downloads\bert\mri\norm.mgz	我猜测这一步和第（5）步的区别是在去除颅骨以后，再
+次根据 GCA 模板调整信号值，输出为 norm.mgz
+transforms/talairach.m3z	将 norm.mgz 非线性配准到 GCA 模板（$FREESURFER_HOME/average/RB_all_2016-05-
+10.vc700.gca），生成配准文件
+
+
+
+
