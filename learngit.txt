@@ -95,6 +95,7 @@
 	git show <tagname>	查看标签信息
 	
 	git tag -d v0.1	删除,因为创建的标签都只存储在本地，不会自动推送到远程。所以，打错的标签可以在本地安全删除。
+	
 	git push origin <tagname>	推送某个标签到远程
 	
 	
