@@ -1,0 +1,114 @@
+1.	git init
+	git add <file>
+	git commit -m "message"
+
+2. 	git status
+	git diff
+	
+3. 	HEAD指向的版本就是当前版本，最新的版本
+	git reset --hard commit_id 既可以用于回退版本，也可以用于把暂存区的修改回退到工作区
+	git log
+	git reflog
+
+4. 	暂存区
+
+5.	第一次修改 -> git add -> 第二次修改 -> git commit
+
+6.	git checkout -- readme.txt 用版本库里的版本替换工作区的版本（丢弃工作区的修改）
+	现在，假设你不但改错了东西，还从暂存区提交到了版本库，怎么办呢？还记得版本回退一节吗？可以回退到上一个版本。
+	不过，这是有条件的，就是你还没有把自己的本地版本库推送到远程。
+
+7. 	rm test.txt 删除工作区文件
+	git rm test.txt 删除版本库文件 + git commit -m， 因为
+	git checkout -- test.txt 删错了，因为版本库里还有呢，所以可以很轻松地把误删的文件恢复到最新版本（其实是用版
+								本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”）
+	从来没有被添加到版本库就被删除的文件，是无法恢复的！
+	你只能恢复文件到最新版本，你会丢失最近一次提交后你修改的内容
+	
+8. 	ssh-keygen -t rsa -C "youremail@example.com" id_rsa.pub
+
+9.	git remote rm origin
+	git remote add origin git@server-name:path/repo-name.git	要关联一个远程库
+	git push -u origin master	第一次推送master分支的所有内容
+	git push origin master	推送最新修改
+	
+10.	git clone git@github.com:michaelliao/gitskills.git	克隆一个仓库
+
+11.	因为创建、合并和删除分支非常快，所以Git鼓励你使用分支完成某个任务，合并后再删掉分支，这和直接在master分支
+	上工作效果是一样的，但过程更安全。Git鼓励大量使用分支。
+	
+	git checkout -b dev	创建dev分支，然后切换到dev分支（-b参数表示创建并切换）
+	
+	git branch dev	创建dev分支
+	git checkout dev	切换到dev分支
+	
+	git branch	查看当前分支
+	
+	git checkout master	切换回master分支
+	
+	git merge dev	合并指定分支dev到当前分支
+	git merge --no-ff -m "merge with no-ff" dev	准备合并dev分支，请注意--no-ff参数，表示禁用Fast forward
+												因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述
+												写进去
+	
+	git branch -d dev	删除dev分支
+	
+12.	当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。解决冲突就是把Git合并失败的文件
+	手动编辑为我们希望的内容，再提交。
+	git status	告诉我们冲突的文件
+	git log --graph --pretty=oneline --abbrev-commit	看到分支合并图
+	
+13.	几个基本原则进行分支管理：
+	1. master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活
+	2. 干活都在dev分支上， 你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上
+		合并就可以了。
+		
+14.	git checkout -b issue-101	在Git中，由于分支是如此的强大，所以，每个bug都可以通过一个新的临时分支来修复，修复后，合并分支，然后将临
+	时分支删除
+	git stash	把当前工作现场“储藏”起来，等以后恢复现场后继续工作
+	git stash list	查看“储藏”起来的工作现场
+	git stash apply stash@{0}	恢复工作现场，但是恢复后，stash内容并不删除，你需要用git stash drop来删除
+	git stash pop	恢复的同时把stash内容也删
+
+15.	开发一个新feature，最好新建一个分支, 然后切回dev，准备合并
+	git branch -D <分支name>	强行删除
+
+16.	当你从远程仓库克隆时，实际上Git自动把本地的master分支和远程的master分支对应起来了，并且，远程仓库的默认名称是origin
+	git remote -v	查看远程库的信息（上面显示了可以抓取和推送的origin的地址。如果没有推送权限，就看不到push的地址）
+	git push origin dev	推送其他分支
+	git push origin master	推送master分支
+	哪些分支需要推送，哪些不需要呢？
+		1.master分支是主分支，因此要时刻与远程同步
+		2.dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步
+		3.bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug
+		4.feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发
+
+17.	多人协作
+
+18.	rebase操作可以把本地未push的分叉提交历史整理成直线
+
+19.	tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起.标签总是和某个commit挂钩。如果这个commit既出现在master分支，
+	又出现在dev分支，那么在这两个分支上都可以看到这个标签
+	git tag v1.0	打一个默认的新标签,默认标签是打在最新提交的commit上的
+	git tag	查看所有标签,标签不是按时间顺序列出，而是按字母排序的
+	git tag v0.9 f52c633	有时候，如果忘了打标签，比如，现在已经是周五了，但应该在周一打的标签没有打，怎么办？方法是找到历史提交的commit id，然后
+	打上就可以了
+	git tag -a v0.1 -m "version 0.1 released" 1094adb	创建带有说明的标签，用-a指定标签名，-m指定说明文字
+	git show <tagname>	查看标签信息
+	
+	git tag -d v0.1	删除,因为创建的标签都只存储在本地，不会自动推送到远程。所以，打错的标签可以在本地安全删除。
+	git push origin <tagname>	推送某个标签到远程
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
